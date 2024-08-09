@@ -20,6 +20,9 @@
 
 .               yyerror("el caracter ingresado no es reconido");
 
+"gatito"  {return IF; }
+"gatote"  {return ELSE; }
+
 %%
 
 int yywrap(void) {

@@ -9,7 +9,7 @@
 %}
 
 
-%token INTEGER VARIABLE
+%token INTEGER VARIABLE IF ELSE
 
 %left '+' '-'
 %left '*' '/'
@@ -20,12 +20,22 @@
 
 program:
         program statement '\n'
-        | 
+        | IF expression '\n'{
+            if($2){
+                printf("entro al if\n");
+            }
+        }
+        | ELSE expression '\n'{
+            if(!$2){
+                printf("entro al else\n");
+            }
+        }
         ;
 statement:
         expression                      { printf("%d\n", $1); }
         | VARIABLE '=' expression       { sym[$1] = $3; }
         ;
+
 expression:
         INTEGER                         
         | VARIABLE                      { $$ = sym[$1]; }
