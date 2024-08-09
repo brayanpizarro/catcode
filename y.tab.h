@@ -41,13 +41,17 @@
    enum yytokentype {
      INTEGER = 258,
      VARIABLE = 259,
-     UMINUS = 260
+     IF = 260,
+     ELSE = 261,
+     UMINUS = 262
    };
 #endif
 /* Tokens.  */
 #define INTEGER 258
 #define VARIABLE 259
-#define UMINUS 260
+#define IF 260
+#define ELSE 261
+#define UMINUS 262
 
 
 

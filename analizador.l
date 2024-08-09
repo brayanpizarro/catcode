@@ -13,6 +13,12 @@
 [-]?[0-9]+      {yylval = atoi(yytext);
                 return INTEGER;
                 }
+                
+"=="            { return '='; }
+"<="            { return '<'; }
+">="            { return '>'; }
+"<"             { return '<'; }
+">"             { return '>'; }
 
 [-+()=/*\n]     { return *yytext; }
 
