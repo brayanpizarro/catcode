@@ -1,589 +1,978 @@
-Terminals unused in grammar
-
-   '<'
-   '>'
-
-
-Estado 36 conflictos: 1 desplazamiento(s)/reducción(ones)
-
-
 Gramática
 
     0 $accept: program $end
 
-    1 program: program statement '\n'
-    2        | statement '\n'
+    1 program: lines
 
-    3 statement: IF '(' expression ')' statement
-    4          | IF '(' expression ')' statement ELSE statement
-    5          | expression
-    6          | VARIABLE '=' expression
+    2 lines: line
+    3      | lines line
 
-    7 expression: INTEGER
-    8           | VARIABLE
-    9           | expression '+' expression
-   10           | expression '-' expression
-   11           | expression '*' expression
-   12           | expression '/' expression
-   13           | '-' expression
-   14           | '(' expression ')'
-   15           | expression "==" expression
-   16           | expression "<=" expression
-   17           | expression ">=" expression
+    4 line: print_statement SEMICOLON
+    5     | assignment SEMICOLON
+    6     | if_statement
+
+    7 print_statement: PRINT LPAREN expression RPAREN
+    8                | PRINT LPAREN RPAREN
+
+    9 assignment: IDENTIFIER ASSIGN expression
+
+   10 $@1: /* vacío */
+
+   11 if_statement: IF LPAREN expression RPAREN LBRACE $@1 lines RBRACE
+
+   12 expression: NUMBER
+   13           | BOOLEAN
+   14           | IDENTIFIER
+   15           | expression PLUS expression
+   16           | expression MINUS expression
+   17           | expression MULT expression
+   18           | expression DIV expression
+   19           | LPAREN expression RPAREN
+   20           | expression AND expression
+   21           | expression OR expression
+   22           | NOT expression
+   23           | expression EQ expression
+   24           | expression NE expression
+   25           | expression LT expression
+   26           | expression LE expression
+   27           | expression GT expression
+   28           | expression GE expression
 
 
 Terminales con las reglas donde aparecen
 
 $end (0) 0
-'\n' (10) 1 2
-'(' (40) 3 4 14
-')' (41) 3 4 14
-'*' (42) 11
-'+' (43) 9
-'-' (45) 10 13
-'/' (47) 12
-'<' (60)
-'=' (61) 6
-'>' (62)
 error (256)
-INTEGER (258) 7
-VARIABLE (259) 6 8
-IF (260) 3 4
-ELSE (261) 4
-UMINUS (262)
-"==" (263) 15
-"<=" (264) 16
-">=" (265) 17
+NUMBER (258) 12
+BOOLEAN (259) 13
+PLUS (260) 15
+MINUS (261) 16
+MULT (262) 17
+DIV (263) 18
+LPAREN (264) 7 8 11 19
+RPAREN (265) 7 8 11 19
+SEMICOLON (266) 4 5
+LBRACE (267) 11
+RBRACE (268) 11
+PRINT (269) 7 8
+IF (270) 11
+IDENTIFIER (271) 9 14
+AND (272) 20
+OR (273) 21
+NOT (274) 22
+ASSIGN (275) 9
+EQ (276) 23
+LE (277) 26
+GE (278) 28
+LT (279) 25
+GT (280) 27
+NE (281) 24
 
 
 No terminales con las reglas donde aparecen
 
-$accept (21)
+$accept (27)
     en la izquierda: 0
-program (22)
-    en la izquierda: 1 2, en la derecha: 0 1
-statement (23)
-    en la izquierda: 3 4 5 6, en la derecha: 1 2 3 4
-expression (24)
-    en la izquierda: 7 8 9 10 11 12 13 14 15 16 17, en la derecha:
-    3 4 5 6 9 10 11 12 13 14 15 16 17
+program (28)
+    en la izquierda: 1, en la derecha: 0
+lines (29)
+    en la izquierda: 2 3, en la derecha: 1 3 11
+line (30)
+    en la izquierda: 4 5 6, en la derecha: 2 3
+print_statement (31)
+    en la izquierda: 7 8, en la derecha: 4
+assignment (32)
+    en la izquierda: 9, en la derecha: 5
+if_statement (33)
+    en la izquierda: 11, en la derecha: 6
+$@1 (34)
+    en la izquierda: 10, en la derecha: 11
+expression (35)
+    en la izquierda: 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27
+    28, en la derecha: 7 9 11 15 16 17 18 19 20 21 22 23 24 25 26 27
+    28
 
 
 estado 0
 
     0 $accept: . program $end
 
-    INTEGER   desplazar e ir al estado 1
-    VARIABLE  desplazar e ir al estado 2
-    IF        desplazar e ir al estado 3
-    '-'       desplazar e ir al estado 4
-    '('       desplazar e ir al estado 5
+    PRINT       desplazar e ir al estado 1
+    IF          desplazar e ir al estado 2
+    IDENTIFIER  desplazar e ir al estado 3
 
-    program     ir al estado 6
-    statement   ir al estado 7
-    expression  ir al estado 8
+    program          ir al estado 4
+    lines            ir al estado 5
+    line             ir al estado 6
+    print_statement  ir al estado 7
+    assignment       ir al estado 8
+    if_statement     ir al estado 9
 
 
 estado 1
 
-    7 expression: INTEGER .
+    7 print_statement: PRINT . LPAREN expression RPAREN
+    8                | PRINT . LPAREN RPAREN
 
-    $default  reduce usando la regla 7 (expression)
+    LPAREN  desplazar e ir al estado 10
 
 
 estado 2
 
-    6 statement: VARIABLE . '=' expression
-    8 expression: VARIABLE .
+   11 if_statement: IF . LPAREN expression RPAREN LBRACE $@1 lines RBRACE
 
-    '='  desplazar e ir al estado 9
-
-    $default  reduce usando la regla 8 (expression)
+    LPAREN  desplazar e ir al estado 11
 
 
 estado 3
 
-    3 statement: IF . '(' expression ')' statement
-    4          | IF . '(' expression ')' statement ELSE statement
+    9 assignment: IDENTIFIER . ASSIGN expression
 
-    '('  desplazar e ir al estado 10
+    ASSIGN  desplazar e ir al estado 12
 
 
 estado 4
 
-   13 expression: '-' . expression
+    0 $accept: program . $end
 
-    INTEGER   desplazar e ir al estado 1
-    VARIABLE  desplazar e ir al estado 11
-    '-'       desplazar e ir al estado 4
-    '('       desplazar e ir al estado 5
-
-    expression  ir al estado 12
+    $end  desplazar e ir al estado 13
 
 
 estado 5
 
-   14 expression: '(' . expression ')'
+    1 program: lines .
+    3 lines: lines . line
 
-    INTEGER   desplazar e ir al estado 1
-    VARIABLE  desplazar e ir al estado 11
-    '-'       desplazar e ir al estado 4
-    '('       desplazar e ir al estado 5
+    PRINT       desplazar e ir al estado 1
+    IF          desplazar e ir al estado 2
+    IDENTIFIER  desplazar e ir al estado 3
 
-    expression  ir al estado 13
+    $default  reduce usando la regla 1 (program)
+
+    line             ir al estado 14
+    print_statement  ir al estado 7
+    assignment       ir al estado 8
+    if_statement     ir al estado 9
 
 
 estado 6
 
-    0 $accept: program . $end
-    1 program: program . statement '\n'
+    2 lines: line .
 
-    $end      desplazar e ir al estado 14
-    INTEGER   desplazar e ir al estado 1
-    VARIABLE  desplazar e ir al estado 2
-    IF        desplazar e ir al estado 3
-    '-'       desplazar e ir al estado 4
-    '('       desplazar e ir al estado 5
-
-    statement   ir al estado 15
-    expression  ir al estado 8
+    $default  reduce usando la regla 2 (lines)
 
 
 estado 7
 
-    2 program: statement . '\n'
+    4 line: print_statement . SEMICOLON
 
-    '\n'  desplazar e ir al estado 16
+    SEMICOLON  desplazar e ir al estado 15
 
 
 estado 8
 
-    5 statement: expression .
-    9 expression: expression . '+' expression
-   10           | expression . '-' expression
-   11           | expression . '*' expression
-   12           | expression . '/' expression
-   15           | expression . "==" expression
-   16           | expression . "<=" expression
-   17           | expression . ">=" expression
+    5 line: assignment . SEMICOLON
 
-    '+'   desplazar e ir al estado 17
-    '-'   desplazar e ir al estado 18
-    '*'   desplazar e ir al estado 19
-    '/'   desplazar e ir al estado 20
-    "=="  desplazar e ir al estado 21
-    "<="  desplazar e ir al estado 22
-    ">="  desplazar e ir al estado 23
-
-    $default  reduce usando la regla 5 (statement)
+    SEMICOLON  desplazar e ir al estado 16
 
 
 estado 9
 
-    6 statement: VARIABLE '=' . expression
+    6 line: if_statement .
 
-    INTEGER   desplazar e ir al estado 1
-    VARIABLE  desplazar e ir al estado 11
-    '-'       desplazar e ir al estado 4
-    '('       desplazar e ir al estado 5
-
-    expression  ir al estado 24
+    $default  reduce usando la regla 6 (line)
 
 
 estado 10
 
-    3 statement: IF '(' . expression ')' statement
-    4          | IF '(' . expression ')' statement ELSE statement
+    7 print_statement: PRINT LPAREN . expression RPAREN
+    8                | PRINT LPAREN . RPAREN
 
-    INTEGER   desplazar e ir al estado 1
-    VARIABLE  desplazar e ir al estado 11
-    '-'       desplazar e ir al estado 4
-    '('       desplazar e ir al estado 5
+    NUMBER      desplazar e ir al estado 17
+    BOOLEAN     desplazar e ir al estado 18
+    LPAREN      desplazar e ir al estado 19
+    RPAREN      desplazar e ir al estado 20
+    IDENTIFIER  desplazar e ir al estado 21
+    NOT         desplazar e ir al estado 22
 
-    expression  ir al estado 25
+    expression  ir al estado 23
 
 
 estado 11
 
-    8 expression: VARIABLE .
+   11 if_statement: IF LPAREN . expression RPAREN LBRACE $@1 lines RBRACE
 
-    $default  reduce usando la regla 8 (expression)
+    NUMBER      desplazar e ir al estado 17
+    BOOLEAN     desplazar e ir al estado 18
+    LPAREN      desplazar e ir al estado 19
+    IDENTIFIER  desplazar e ir al estado 21
+    NOT         desplazar e ir al estado 22
+
+    expression  ir al estado 24
 
 
 estado 12
 
-    9 expression: expression . '+' expression
-   10           | expression . '-' expression
-   11           | expression . '*' expression
-   12           | expression . '/' expression
-   13           | '-' expression .
-   15           | expression . "==" expression
-   16           | expression . "<=" expression
-   17           | expression . ">=" expression
+    9 assignment: IDENTIFIER ASSIGN . expression
 
-    "=="  desplazar e ir al estado 21
-    "<="  desplazar e ir al estado 22
-    ">="  desplazar e ir al estado 23
+    NUMBER      desplazar e ir al estado 17
+    BOOLEAN     desplazar e ir al estado 18
+    LPAREN      desplazar e ir al estado 19
+    IDENTIFIER  desplazar e ir al estado 21
+    NOT         desplazar e ir al estado 22
 
-    $default  reduce usando la regla 13 (expression)
+    expression  ir al estado 25
 
 
 estado 13
-
-    9 expression: expression . '+' expression
-   10           | expression . '-' expression
-   11           | expression . '*' expression
-   12           | expression . '/' expression
-   14           | '(' expression . ')'
-   15           | expression . "==" expression
-   16           | expression . "<=" expression
-   17           | expression . ">=" expression
-
-    '+'   desplazar e ir al estado 17
-    '-'   desplazar e ir al estado 18
-    '*'   desplazar e ir al estado 19
-    '/'   desplazar e ir al estado 20
-    "=="  desplazar e ir al estado 21
-    "<="  desplazar e ir al estado 22
-    ">="  desplazar e ir al estado 23
-    ')'   desplazar e ir al estado 26
-
-
-estado 14
 
     0 $accept: program $end .
 
     $default  aceptar
 
 
+estado 14
+
+    3 lines: lines line .
+
+    $default  reduce usando la regla 3 (lines)
+
+
 estado 15
 
-    1 program: program statement . '\n'
+    4 line: print_statement SEMICOLON .
 
-    '\n'  desplazar e ir al estado 27
+    $default  reduce usando la regla 4 (line)
 
 
 estado 16
 
-    2 program: statement '\n' .
+    5 line: assignment SEMICOLON .
 
-    $default  reduce usando la regla 2 (program)
+    $default  reduce usando la regla 5 (line)
 
 
 estado 17
 
-    9 expression: expression '+' . expression
-
-    INTEGER   desplazar e ir al estado 1
-    VARIABLE  desplazar e ir al estado 11
-    '-'       desplazar e ir al estado 4
-    '('       desplazar e ir al estado 5
-
-    expression  ir al estado 28
-
-
-estado 18
-
-   10 expression: expression '-' . expression
-
-    INTEGER   desplazar e ir al estado 1
-    VARIABLE  desplazar e ir al estado 11
-    '-'       desplazar e ir al estado 4
-    '('       desplazar e ir al estado 5
-
-    expression  ir al estado 29
-
-
-estado 19
-
-   11 expression: expression '*' . expression
-
-    INTEGER   desplazar e ir al estado 1
-    VARIABLE  desplazar e ir al estado 11
-    '-'       desplazar e ir al estado 4
-    '('       desplazar e ir al estado 5
-
-    expression  ir al estado 30
-
-
-estado 20
-
-   12 expression: expression '/' . expression
-
-    INTEGER   desplazar e ir al estado 1
-    VARIABLE  desplazar e ir al estado 11
-    '-'       desplazar e ir al estado 4
-    '('       desplazar e ir al estado 5
-
-    expression  ir al estado 31
-
-
-estado 21
-
-   15 expression: expression "==" . expression
-
-    INTEGER   desplazar e ir al estado 1
-    VARIABLE  desplazar e ir al estado 11
-    '-'       desplazar e ir al estado 4
-    '('       desplazar e ir al estado 5
-
-    expression  ir al estado 32
-
-
-estado 22
-
-   16 expression: expression "<=" . expression
-
-    INTEGER   desplazar e ir al estado 1
-    VARIABLE  desplazar e ir al estado 11
-    '-'       desplazar e ir al estado 4
-    '('       desplazar e ir al estado 5
-
-    expression  ir al estado 33
-
-
-estado 23
-
-   17 expression: expression ">=" . expression
-
-    INTEGER   desplazar e ir al estado 1
-    VARIABLE  desplazar e ir al estado 11
-    '-'       desplazar e ir al estado 4
-    '('       desplazar e ir al estado 5
-
-    expression  ir al estado 34
-
-
-estado 24
-
-    6 statement: VARIABLE '=' expression .
-    9 expression: expression . '+' expression
-   10           | expression . '-' expression
-   11           | expression . '*' expression
-   12           | expression . '/' expression
-   15           | expression . "==" expression
-   16           | expression . "<=" expression
-   17           | expression . ">=" expression
-
-    '+'   desplazar e ir al estado 17
-    '-'   desplazar e ir al estado 18
-    '*'   desplazar e ir al estado 19
-    '/'   desplazar e ir al estado 20
-    "=="  desplazar e ir al estado 21
-    "<="  desplazar e ir al estado 22
-    ">="  desplazar e ir al estado 23
-
-    $default  reduce usando la regla 6 (statement)
-
-
-estado 25
-
-    3 statement: IF '(' expression . ')' statement
-    4          | IF '(' expression . ')' statement ELSE statement
-    9 expression: expression . '+' expression
-   10           | expression . '-' expression
-   11           | expression . '*' expression
-   12           | expression . '/' expression
-   15           | expression . "==" expression
-   16           | expression . "<=" expression
-   17           | expression . ">=" expression
-
-    '+'   desplazar e ir al estado 17
-    '-'   desplazar e ir al estado 18
-    '*'   desplazar e ir al estado 19
-    '/'   desplazar e ir al estado 20
-    "=="  desplazar e ir al estado 21
-    "<="  desplazar e ir al estado 22
-    ">="  desplazar e ir al estado 23
-    ')'   desplazar e ir al estado 35
-
-
-estado 26
-
-   14 expression: '(' expression ')' .
-
-    $default  reduce usando la regla 14 (expression)
-
-
-estado 27
-
-    1 program: program statement '\n' .
-
-    $default  reduce usando la regla 1 (program)
-
-
-estado 28
-
-    9 expression: expression . '+' expression
-    9           | expression '+' expression .
-   10           | expression . '-' expression
-   11           | expression . '*' expression
-   12           | expression . '/' expression
-   15           | expression . "==" expression
-   16           | expression . "<=" expression
-   17           | expression . ">=" expression
-
-    '*'   desplazar e ir al estado 19
-    '/'   desplazar e ir al estado 20
-    "=="  desplazar e ir al estado 21
-    "<="  desplazar e ir al estado 22
-    ">="  desplazar e ir al estado 23
-
-    $default  reduce usando la regla 9 (expression)
-
-
-estado 29
-
-    9 expression: expression . '+' expression
-   10           | expression . '-' expression
-   10           | expression '-' expression .
-   11           | expression . '*' expression
-   12           | expression . '/' expression
-   15           | expression . "==" expression
-   16           | expression . "<=" expression
-   17           | expression . ">=" expression
-
-    '*'   desplazar e ir al estado 19
-    '/'   desplazar e ir al estado 20
-    "=="  desplazar e ir al estado 21
-    "<="  desplazar e ir al estado 22
-    ">="  desplazar e ir al estado 23
-
-    $default  reduce usando la regla 10 (expression)
-
-
-estado 30
-
-    9 expression: expression . '+' expression
-   10           | expression . '-' expression
-   11           | expression . '*' expression
-   11           | expression '*' expression .
-   12           | expression . '/' expression
-   15           | expression . "==" expression
-   16           | expression . "<=" expression
-   17           | expression . ">=" expression
-
-    "=="  desplazar e ir al estado 21
-    "<="  desplazar e ir al estado 22
-    ">="  desplazar e ir al estado 23
-
-    $default  reduce usando la regla 11 (expression)
-
-
-estado 31
-
-    9 expression: expression . '+' expression
-   10           | expression . '-' expression
-   11           | expression . '*' expression
-   12           | expression . '/' expression
-   12           | expression '/' expression .
-   15           | expression . "==" expression
-   16           | expression . "<=" expression
-   17           | expression . ">=" expression
-
-    "=="  desplazar e ir al estado 21
-    "<="  desplazar e ir al estado 22
-    ">="  desplazar e ir al estado 23
+   12 expression: NUMBER .
 
     $default  reduce usando la regla 12 (expression)
 
 
+estado 18
+
+   13 expression: BOOLEAN .
+
+    $default  reduce usando la regla 13 (expression)
+
+
+estado 19
+
+   19 expression: LPAREN . expression RPAREN
+
+    NUMBER      desplazar e ir al estado 17
+    BOOLEAN     desplazar e ir al estado 18
+    LPAREN      desplazar e ir al estado 19
+    IDENTIFIER  desplazar e ir al estado 21
+    NOT         desplazar e ir al estado 22
+
+    expression  ir al estado 26
+
+
+estado 20
+
+    8 print_statement: PRINT LPAREN RPAREN .
+
+    $default  reduce usando la regla 8 (print_statement)
+
+
+estado 21
+
+   14 expression: IDENTIFIER .
+
+    $default  reduce usando la regla 14 (expression)
+
+
+estado 22
+
+   22 expression: NOT . expression
+
+    NUMBER      desplazar e ir al estado 17
+    BOOLEAN     desplazar e ir al estado 18
+    LPAREN      desplazar e ir al estado 19
+    IDENTIFIER  desplazar e ir al estado 21
+    NOT         desplazar e ir al estado 22
+
+    expression  ir al estado 27
+
+
+estado 23
+
+    7 print_statement: PRINT LPAREN expression . RPAREN
+   15 expression: expression . PLUS expression
+   16           | expression . MINUS expression
+   17           | expression . MULT expression
+   18           | expression . DIV expression
+   20           | expression . AND expression
+   21           | expression . OR expression
+   23           | expression . EQ expression
+   24           | expression . NE expression
+   25           | expression . LT expression
+   26           | expression . LE expression
+   27           | expression . GT expression
+   28           | expression . GE expression
+
+    PLUS    desplazar e ir al estado 28
+    MINUS   desplazar e ir al estado 29
+    MULT    desplazar e ir al estado 30
+    DIV     desplazar e ir al estado 31
+    RPAREN  desplazar e ir al estado 32
+    AND     desplazar e ir al estado 33
+    OR      desplazar e ir al estado 34
+    EQ      desplazar e ir al estado 35
+    LE      desplazar e ir al estado 36
+    GE      desplazar e ir al estado 37
+    LT      desplazar e ir al estado 38
+    GT      desplazar e ir al estado 39
+    NE      desplazar e ir al estado 40
+
+
+estado 24
+
+   11 if_statement: IF LPAREN expression . RPAREN LBRACE $@1 lines RBRACE
+   15 expression: expression . PLUS expression
+   16           | expression . MINUS expression
+   17           | expression . MULT expression
+   18           | expression . DIV expression
+   20           | expression . AND expression
+   21           | expression . OR expression
+   23           | expression . EQ expression
+   24           | expression . NE expression
+   25           | expression . LT expression
+   26           | expression . LE expression
+   27           | expression . GT expression
+   28           | expression . GE expression
+
+    PLUS    desplazar e ir al estado 28
+    MINUS   desplazar e ir al estado 29
+    MULT    desplazar e ir al estado 30
+    DIV     desplazar e ir al estado 31
+    RPAREN  desplazar e ir al estado 41
+    AND     desplazar e ir al estado 33
+    OR      desplazar e ir al estado 34
+    EQ      desplazar e ir al estado 35
+    LE      desplazar e ir al estado 36
+    GE      desplazar e ir al estado 37
+    LT      desplazar e ir al estado 38
+    GT      desplazar e ir al estado 39
+    NE      desplazar e ir al estado 40
+
+
+estado 25
+
+    9 assignment: IDENTIFIER ASSIGN expression .
+   15 expression: expression . PLUS expression
+   16           | expression . MINUS expression
+   17           | expression . MULT expression
+   18           | expression . DIV expression
+   20           | expression . AND expression
+   21           | expression . OR expression
+   23           | expression . EQ expression
+   24           | expression . NE expression
+   25           | expression . LT expression
+   26           | expression . LE expression
+   27           | expression . GT expression
+   28           | expression . GE expression
+
+    PLUS   desplazar e ir al estado 28
+    MINUS  desplazar e ir al estado 29
+    MULT   desplazar e ir al estado 30
+    DIV    desplazar e ir al estado 31
+    AND    desplazar e ir al estado 33
+    OR     desplazar e ir al estado 34
+    EQ     desplazar e ir al estado 35
+    LE     desplazar e ir al estado 36
+    GE     desplazar e ir al estado 37
+    LT     desplazar e ir al estado 38
+    GT     desplazar e ir al estado 39
+    NE     desplazar e ir al estado 40
+
+    $default  reduce usando la regla 9 (assignment)
+
+
+estado 26
+
+   15 expression: expression . PLUS expression
+   16           | expression . MINUS expression
+   17           | expression . MULT expression
+   18           | expression . DIV expression
+   19           | LPAREN expression . RPAREN
+   20           | expression . AND expression
+   21           | expression . OR expression
+   23           | expression . EQ expression
+   24           | expression . NE expression
+   25           | expression . LT expression
+   26           | expression . LE expression
+   27           | expression . GT expression
+   28           | expression . GE expression
+
+    PLUS    desplazar e ir al estado 28
+    MINUS   desplazar e ir al estado 29
+    MULT    desplazar e ir al estado 30
+    DIV     desplazar e ir al estado 31
+    RPAREN  desplazar e ir al estado 42
+    AND     desplazar e ir al estado 33
+    OR      desplazar e ir al estado 34
+    EQ      desplazar e ir al estado 35
+    LE      desplazar e ir al estado 36
+    GE      desplazar e ir al estado 37
+    LT      desplazar e ir al estado 38
+    GT      desplazar e ir al estado 39
+    NE      desplazar e ir al estado 40
+
+
+estado 27
+
+   15 expression: expression . PLUS expression
+   16           | expression . MINUS expression
+   17           | expression . MULT expression
+   18           | expression . DIV expression
+   20           | expression . AND expression
+   21           | expression . OR expression
+   22           | NOT expression .
+   23           | expression . EQ expression
+   24           | expression . NE expression
+   25           | expression . LT expression
+   26           | expression . LE expression
+   27           | expression . GT expression
+   28           | expression . GE expression
+
+    PLUS   desplazar e ir al estado 28
+    MINUS  desplazar e ir al estado 29
+    MULT   desplazar e ir al estado 30
+    DIV    desplazar e ir al estado 31
+    EQ     desplazar e ir al estado 35
+    LE     desplazar e ir al estado 36
+    GE     desplazar e ir al estado 37
+    LT     desplazar e ir al estado 38
+    GT     desplazar e ir al estado 39
+    NE     desplazar e ir al estado 40
+
+    $default  reduce usando la regla 22 (expression)
+
+
+estado 28
+
+   15 expression: expression PLUS . expression
+
+    NUMBER      desplazar e ir al estado 17
+    BOOLEAN     desplazar e ir al estado 18
+    LPAREN      desplazar e ir al estado 19
+    IDENTIFIER  desplazar e ir al estado 21
+    NOT         desplazar e ir al estado 22
+
+    expression  ir al estado 43
+
+
+estado 29
+
+   16 expression: expression MINUS . expression
+
+    NUMBER      desplazar e ir al estado 17
+    BOOLEAN     desplazar e ir al estado 18
+    LPAREN      desplazar e ir al estado 19
+    IDENTIFIER  desplazar e ir al estado 21
+    NOT         desplazar e ir al estado 22
+
+    expression  ir al estado 44
+
+
+estado 30
+
+   17 expression: expression MULT . expression
+
+    NUMBER      desplazar e ir al estado 17
+    BOOLEAN     desplazar e ir al estado 18
+    LPAREN      desplazar e ir al estado 19
+    IDENTIFIER  desplazar e ir al estado 21
+    NOT         desplazar e ir al estado 22
+
+    expression  ir al estado 45
+
+
+estado 31
+
+   18 expression: expression DIV . expression
+
+    NUMBER      desplazar e ir al estado 17
+    BOOLEAN     desplazar e ir al estado 18
+    LPAREN      desplazar e ir al estado 19
+    IDENTIFIER  desplazar e ir al estado 21
+    NOT         desplazar e ir al estado 22
+
+    expression  ir al estado 46
+
+
 estado 32
 
-    9 expression: expression . '+' expression
-   10           | expression . '-' expression
-   11           | expression . '*' expression
-   12           | expression . '/' expression
-   15           | expression . "==" expression
-   15           | expression "==" expression .
-   16           | expression . "<=" expression
-   17           | expression . ">=" expression
+    7 print_statement: PRINT LPAREN expression RPAREN .
 
-    "=="  error (no asociativo)
-    "<="  error (no asociativo)
-    ">="  error (no asociativo)
-
-    $default  reduce usando la regla 15 (expression)
+    $default  reduce usando la regla 7 (print_statement)
 
 
 estado 33
 
-    9 expression: expression . '+' expression
-   10           | expression . '-' expression
-   11           | expression . '*' expression
-   12           | expression . '/' expression
-   15           | expression . "==" expression
-   16           | expression . "<=" expression
-   16           | expression "<=" expression .
-   17           | expression . ">=" expression
+   20 expression: expression AND . expression
 
-    "=="  error (no asociativo)
-    "<="  error (no asociativo)
-    ">="  error (no asociativo)
+    NUMBER      desplazar e ir al estado 17
+    BOOLEAN     desplazar e ir al estado 18
+    LPAREN      desplazar e ir al estado 19
+    IDENTIFIER  desplazar e ir al estado 21
+    NOT         desplazar e ir al estado 22
 
-    $default  reduce usando la regla 16 (expression)
+    expression  ir al estado 47
 
 
 estado 34
 
-    9 expression: expression . '+' expression
-   10           | expression . '-' expression
-   11           | expression . '*' expression
-   12           | expression . '/' expression
-   15           | expression . "==" expression
-   16           | expression . "<=" expression
-   17           | expression . ">=" expression
-   17           | expression ">=" expression .
+   21 expression: expression OR . expression
 
-    "=="  error (no asociativo)
-    "<="  error (no asociativo)
-    ">="  error (no asociativo)
+    NUMBER      desplazar e ir al estado 17
+    BOOLEAN     desplazar e ir al estado 18
+    LPAREN      desplazar e ir al estado 19
+    IDENTIFIER  desplazar e ir al estado 21
+    NOT         desplazar e ir al estado 22
 
-    $default  reduce usando la regla 17 (expression)
+    expression  ir al estado 48
 
 
 estado 35
 
-    3 statement: IF '(' expression ')' . statement
-    4          | IF '(' expression ')' . statement ELSE statement
+   23 expression: expression EQ . expression
 
-    INTEGER   desplazar e ir al estado 1
-    VARIABLE  desplazar e ir al estado 2
-    IF        desplazar e ir al estado 3
-    '-'       desplazar e ir al estado 4
-    '('       desplazar e ir al estado 5
+    NUMBER      desplazar e ir al estado 17
+    BOOLEAN     desplazar e ir al estado 18
+    LPAREN      desplazar e ir al estado 19
+    IDENTIFIER  desplazar e ir al estado 21
+    NOT         desplazar e ir al estado 22
 
-    statement   ir al estado 36
-    expression  ir al estado 8
+    expression  ir al estado 49
 
 
 estado 36
 
-    3 statement: IF '(' expression ')' statement .
-    4          | IF '(' expression ')' statement . ELSE statement
+   26 expression: expression LE . expression
 
-    ELSE  desplazar e ir al estado 37
+    NUMBER      desplazar e ir al estado 17
+    BOOLEAN     desplazar e ir al estado 18
+    LPAREN      desplazar e ir al estado 19
+    IDENTIFIER  desplazar e ir al estado 21
+    NOT         desplazar e ir al estado 22
 
-    ELSE      [reduce usando la regla 3 (statement)]
-    $default  reduce usando la regla 3 (statement)
+    expression  ir al estado 50
 
 
 estado 37
 
-    4 statement: IF '(' expression ')' statement ELSE . statement
+   28 expression: expression GE . expression
 
-    INTEGER   desplazar e ir al estado 1
-    VARIABLE  desplazar e ir al estado 2
-    IF        desplazar e ir al estado 3
-    '-'       desplazar e ir al estado 4
-    '('       desplazar e ir al estado 5
+    NUMBER      desplazar e ir al estado 17
+    BOOLEAN     desplazar e ir al estado 18
+    LPAREN      desplazar e ir al estado 19
+    IDENTIFIER  desplazar e ir al estado 21
+    NOT         desplazar e ir al estado 22
 
-    statement   ir al estado 38
-    expression  ir al estado 8
+    expression  ir al estado 51
 
 
 estado 38
 
-    4 statement: IF '(' expression ')' statement ELSE statement .
+   25 expression: expression LT . expression
 
-    $default  reduce usando la regla 4 (statement)
+    NUMBER      desplazar e ir al estado 17
+    BOOLEAN     desplazar e ir al estado 18
+    LPAREN      desplazar e ir al estado 19
+    IDENTIFIER  desplazar e ir al estado 21
+    NOT         desplazar e ir al estado 22
+
+    expression  ir al estado 52
+
+
+estado 39
+
+   27 expression: expression GT . expression
+
+    NUMBER      desplazar e ir al estado 17
+    BOOLEAN     desplazar e ir al estado 18
+    LPAREN      desplazar e ir al estado 19
+    IDENTIFIER  desplazar e ir al estado 21
+    NOT         desplazar e ir al estado 22
+
+    expression  ir al estado 53
+
+
+estado 40
+
+   24 expression: expression NE . expression
+
+    NUMBER      desplazar e ir al estado 17
+    BOOLEAN     desplazar e ir al estado 18
+    LPAREN      desplazar e ir al estado 19
+    IDENTIFIER  desplazar e ir al estado 21
+    NOT         desplazar e ir al estado 22
+
+    expression  ir al estado 54
+
+
+estado 41
+
+   11 if_statement: IF LPAREN expression RPAREN . LBRACE $@1 lines RBRACE
+
+    LBRACE  desplazar e ir al estado 55
+
+
+estado 42
+
+   19 expression: LPAREN expression RPAREN .
+
+    $default  reduce usando la regla 19 (expression)
+
+
+estado 43
+
+   15 expression: expression . PLUS expression
+   15           | expression PLUS expression .
+   16           | expression . MINUS expression
+   17           | expression . MULT expression
+   18           | expression . DIV expression
+   20           | expression . AND expression
+   21           | expression . OR expression
+   23           | expression . EQ expression
+   24           | expression . NE expression
+   25           | expression . LT expression
+   26           | expression . LE expression
+   27           | expression . GT expression
+   28           | expression . GE expression
+
+    MULT  desplazar e ir al estado 30
+    DIV   desplazar e ir al estado 31
+    EQ    desplazar e ir al estado 35
+    LE    desplazar e ir al estado 36
+    GE    desplazar e ir al estado 37
+    LT    desplazar e ir al estado 38
+    GT    desplazar e ir al estado 39
+    NE    desplazar e ir al estado 40
+
+    $default  reduce usando la regla 15 (expression)
+
+
+estado 44
+
+   15 expression: expression . PLUS expression
+   16           | expression . MINUS expression
+   16           | expression MINUS expression .
+   17           | expression . MULT expression
+   18           | expression . DIV expression
+   20           | expression . AND expression
+   21           | expression . OR expression
+   23           | expression . EQ expression
+   24           | expression . NE expression
+   25           | expression . LT expression
+   26           | expression . LE expression
+   27           | expression . GT expression
+   28           | expression . GE expression
+
+    MULT  desplazar e ir al estado 30
+    DIV   desplazar e ir al estado 31
+    EQ    desplazar e ir al estado 35
+    LE    desplazar e ir al estado 36
+    GE    desplazar e ir al estado 37
+    LT    desplazar e ir al estado 38
+    GT    desplazar e ir al estado 39
+    NE    desplazar e ir al estado 40
+
+    $default  reduce usando la regla 16 (expression)
+
+
+estado 45
+
+   15 expression: expression . PLUS expression
+   16           | expression . MINUS expression
+   17           | expression . MULT expression
+   17           | expression MULT expression .
+   18           | expression . DIV expression
+   20           | expression . AND expression
+   21           | expression . OR expression
+   23           | expression . EQ expression
+   24           | expression . NE expression
+   25           | expression . LT expression
+   26           | expression . LE expression
+   27           | expression . GT expression
+   28           | expression . GE expression
+
+    EQ  desplazar e ir al estado 35
+    LE  desplazar e ir al estado 36
+    GE  desplazar e ir al estado 37
+    LT  desplazar e ir al estado 38
+    GT  desplazar e ir al estado 39
+    NE  desplazar e ir al estado 40
+
+    $default  reduce usando la regla 17 (expression)
+
+
+estado 46
+
+   15 expression: expression . PLUS expression
+   16           | expression . MINUS expression
+   17           | expression . MULT expression
+   18           | expression . DIV expression
+   18           | expression DIV expression .
+   20           | expression . AND expression
+   21           | expression . OR expression
+   23           | expression . EQ expression
+   24           | expression . NE expression
+   25           | expression . LT expression
+   26           | expression . LE expression
+   27           | expression . GT expression
+   28           | expression . GE expression
+
+    EQ  desplazar e ir al estado 35
+    LE  desplazar e ir al estado 36
+    GE  desplazar e ir al estado 37
+    LT  desplazar e ir al estado 38
+    GT  desplazar e ir al estado 39
+    NE  desplazar e ir al estado 40
+
+    $default  reduce usando la regla 18 (expression)
+
+
+estado 47
+
+   15 expression: expression . PLUS expression
+   16           | expression . MINUS expression
+   17           | expression . MULT expression
+   18           | expression . DIV expression
+   20           | expression . AND expression
+   20           | expression AND expression .
+   21           | expression . OR expression
+   23           | expression . EQ expression
+   24           | expression . NE expression
+   25           | expression . LT expression
+   26           | expression . LE expression
+   27           | expression . GT expression
+   28           | expression . GE expression
+
+    PLUS   desplazar e ir al estado 28
+    MINUS  desplazar e ir al estado 29
+    MULT   desplazar e ir al estado 30
+    DIV    desplazar e ir al estado 31
+    EQ     desplazar e ir al estado 35
+    LE     desplazar e ir al estado 36
+    GE     desplazar e ir al estado 37
+    LT     desplazar e ir al estado 38
+    GT     desplazar e ir al estado 39
+    NE     desplazar e ir al estado 40
+
+    $default  reduce usando la regla 20 (expression)
+
+
+estado 48
+
+   15 expression: expression . PLUS expression
+   16           | expression . MINUS expression
+   17           | expression . MULT expression
+   18           | expression . DIV expression
+   20           | expression . AND expression
+   21           | expression . OR expression
+   21           | expression OR expression .
+   23           | expression . EQ expression
+   24           | expression . NE expression
+   25           | expression . LT expression
+   26           | expression . LE expression
+   27           | expression . GT expression
+   28           | expression . GE expression
+
+    PLUS   desplazar e ir al estado 28
+    MINUS  desplazar e ir al estado 29
+    MULT   desplazar e ir al estado 30
+    DIV    desplazar e ir al estado 31
+    AND    desplazar e ir al estado 33
+    EQ     desplazar e ir al estado 35
+    LE     desplazar e ir al estado 36
+    GE     desplazar e ir al estado 37
+    LT     desplazar e ir al estado 38
+    GT     desplazar e ir al estado 39
+    NE     desplazar e ir al estado 40
+
+    $default  reduce usando la regla 21 (expression)
+
+
+estado 49
+
+   15 expression: expression . PLUS expression
+   16           | expression . MINUS expression
+   17           | expression . MULT expression
+   18           | expression . DIV expression
+   20           | expression . AND expression
+   21           | expression . OR expression
+   23           | expression . EQ expression
+   23           | expression EQ expression .
+   24           | expression . NE expression
+   25           | expression . LT expression
+   26           | expression . LE expression
+   27           | expression . GT expression
+   28           | expression . GE expression
+
+    LE  desplazar e ir al estado 36
+    GE  desplazar e ir al estado 37
+    LT  desplazar e ir al estado 38
+    GT  desplazar e ir al estado 39
+
+    $default  reduce usando la regla 23 (expression)
+
+
+estado 50
+
+   15 expression: expression . PLUS expression
+   16           | expression . MINUS expression
+   17           | expression . MULT expression
+   18           | expression . DIV expression
+   20           | expression . AND expression
+   21           | expression . OR expression
+   23           | expression . EQ expression
+   24           | expression . NE expression
+   25           | expression . LT expression
+   26           | expression . LE expression
+   26           | expression LE expression .
+   27           | expression . GT expression
+   28           | expression . GE expression
+
+    $default  reduce usando la regla 26 (expression)
+
+
+estado 51
+
+   15 expression: expression . PLUS expression
+   16           | expression . MINUS expression
+   17           | expression . MULT expression
+   18           | expression . DIV expression
+   20           | expression . AND expression
+   21           | expression . OR expression
+   23           | expression . EQ expression
+   24           | expression . NE expression
+   25           | expression . LT expression
+   26           | expression . LE expression
+   27           | expression . GT expression
+   28           | expression . GE expression
+   28           | expression GE expression .
+
+    $default  reduce usando la regla 28 (expression)
+
+
+estado 52
+
+   15 expression: expression . PLUS expression
+   16           | expression . MINUS expression
+   17           | expression . MULT expression
+   18           | expression . DIV expression
+   20           | expression . AND expression
+   21           | expression . OR expression
+   23           | expression . EQ expression
+   24           | expression . NE expression
+   25           | expression . LT expression
+   25           | expression LT expression .
+   26           | expression . LE expression
+   27           | expression . GT expression
+   28           | expression . GE expression
+
+    $default  reduce usando la regla 25 (expression)
+
+
+estado 53
+
+   15 expression: expression . PLUS expression
+   16           | expression . MINUS expression
+   17           | expression . MULT expression
+   18           | expression . DIV expression
+   20           | expression . AND expression
+   21           | expression . OR expression
+   23           | expression . EQ expression
+   24           | expression . NE expression
+   25           | expression . LT expression
+   26           | expression . LE expression
+   27           | expression . GT expression
+   27           | expression GT expression .
+   28           | expression . GE expression
+
+    $default  reduce usando la regla 27 (expression)
+
+
+estado 54
+
+   15 expression: expression . PLUS expression
+   16           | expression . MINUS expression
+   17           | expression . MULT expression
+   18           | expression . DIV expression
+   20           | expression . AND expression
+   21           | expression . OR expression
+   23           | expression . EQ expression
+   24           | expression . NE expression
+   24           | expression NE expression .
+   25           | expression . LT expression
+   26           | expression . LE expression
+   27           | expression . GT expression
+   28           | expression . GE expression
+
+    LE  desplazar e ir al estado 36
+    GE  desplazar e ir al estado 37
+    LT  desplazar e ir al estado 38
+    GT  desplazar e ir al estado 39
+
+    $default  reduce usando la regla 24 (expression)
+
+
+estado 55
+
+   11 if_statement: IF LPAREN expression RPAREN LBRACE . $@1 lines RBRACE
+
+    $default  reduce usando la regla 10 ($@1)
+
+    $@1  ir al estado 56
+
+
+estado 56
+
+   11 if_statement: IF LPAREN expression RPAREN LBRACE $@1 . lines RBRACE
+
+    PRINT       desplazar e ir al estado 1
+    IF          desplazar e ir al estado 2
+    IDENTIFIER  desplazar e ir al estado 3
+
+    lines            ir al estado 57
+    line             ir al estado 6
+    print_statement  ir al estado 7
+    assignment       ir al estado 8
+    if_statement     ir al estado 9
+
+
+estado 57
+
+    3 lines: lines . line
+   11 if_statement: IF LPAREN expression RPAREN LBRACE $@1 lines . RBRACE
+
+    RBRACE      desplazar e ir al estado 58
+    PRINT       desplazar e ir al estado 1
+    IF          desplazar e ir al estado 2
+    IDENTIFIER  desplazar e ir al estado 3
+
+    line             ir al estado 14
+    print_statement  ir al estado 7
+    assignment       ir al estado 8
+    if_statement     ir al estado 9
+
+
+estado 58
+
+   11 if_statement: IF LPAREN expression RPAREN LBRACE $@1 lines RBRACE .
+
+    $default  reduce usando la regla 11 (if_statement)

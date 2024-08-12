@@ -19,16 +19,6 @@ int num_vars = 0;
 variable get_var(const char *name);
 void set_var_value(const char *name, int value, int is_boolean);
 
-void print_value(int value, int is_boolean) {
-    if (is_boolean) {
-        printf(value ? "true\n" : "false\n");
-    } else {
-        printf("%d\n", value);
-    }
-}
-
-int execute_block;
-
 %}
 
 %union {
@@ -60,6 +50,7 @@ int execute_block;
 
 
 %%
+
 
 program:
     lines
@@ -194,35 +185,18 @@ void yyerror(const char *s) {
     fprintf(stderr, "Error: %s\n", s);
 }
 
-int main() {
+int main(void) {
     printf(" --------------------------------------\n");
-    printf("|   Bienvenido al Papu Compilador     |\n");
-    printf("| Hecho por los Papus para los Papus  |\n");
+    printf("|   Bienvenido al Compilador         |\n");
+    printf("|    Hecho por los Papus para los Papus |\n");
     printf(" --------------------------------------\n");
 
-    char filename[1024];
-    printf("Ingrese el nombre del archivo de entrada (ejemplo: input.papu): ");
-    fgets(filename, sizeof(filename), stdin);
-    filename[strcspn(filename, "\n")] = 0;
-
-    FILE *file = fopen(filename, "r");
-    if (!file) {
-        perror("Error al abrir el archivo");
-        return 1;
-    }
-
-    extern FILE *yyin;
-    yyin = file;
-
-    execute_block = 1; // Inicialmente permitir la ejecución del bloque
-
+    freopen("a.txt", "r", stdin);
     if (!yyparse()) {
         printf("Parsing completed successfully.\n");
     } else {
         printf("Parsing failed.\n");
     }
-
-    fclose(file);
 
     return 0;
 }
