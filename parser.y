@@ -5,17 +5,26 @@
 void yyerror(char *);
 int yylex(void);
 
-int sym[26];
+int sym[26]; // Array para almacenar valores de variables
 %}
 
-%token INTEGER VARIABLE IF ELSE
+%union {
+    int num;
+    char id;
+}
+
+%token <num> INTEGER
+%token <id> VARIABLE
+%token GATITO GATOTE
 
 %left '+' '-'
 %left '*' '/'
 %nonassoc UMINUS
 %nonassoc '<' '>' "==" "<=" ">="
-%nonassoc ELSE
-%nonassoc IF
+%nonassoc GATOTE
+%left GATITO
+
+%type <num> expression
 
 %%
 
@@ -25,40 +34,39 @@ program:
     ;
 
 statement:
-    IF '(' expression ')' statement                  { 
-        if ($3) {
-            printf("entro al if\n");
-        }
-    }
-    | IF '(' expression ')' statement ELSE statement {
-        if ($3) {
-            printf("entro al if\n");
-        } else {
-            printf("entro al else\n");
-        }
-    }
-    | expression                                { printf("%d\n", $1); }
-    | VARIABLE '=' expression                   { sym[$1] = $3; }
+    if_else_statement
+    | expression { printf("%d\n", $1); }
+    | VARIABLE '=' expression { sym[$1 - 'a'] = $3; }
+    ;
+if_else_statement:
+    GATITO '(' expression ')' statement if_else_tail
+    ;
+
+if_else_tail:
+    GATOTE statement
     ;
 
 expression:
-    INTEGER                                     { $$ = $1; }
-    | VARIABLE                                  { $$ = sym[$1]; }
-    | expression '+' expression                 { $$ = $1 + $3; }
-    | expression '-' expression                 { $$ = $1 - $3; }
-    | expression '*' expression                 { $$ = $1 * $3; }
-    | expression '/' expression                 { 
+    INTEGER { $$ = $1; }
+    | VARIABLE { $$ = sym[$1 - 'a']; }
+    | expression '+' expression { $$ = $1 + $3; }
+    | expression '-' expression { $$ = $1 - $3; }
+    | expression '*' expression { $$ = $1 * $3; }
+    | expression '/' expression {
         if ($3 == 0) {
-            yyerror("no se puede dividir con 0"); exit(0);
+            yyerror("No se puede dividir por 0");
+            exit(1); // Salir con código de error
         } else {
             $$ = $1 / $3;
         }
     }
-    | '-' expression %prec UMINUS               { $$ = -$2; }
-    | '(' expression ')'                        { $$ = $2; }
-    | expression "==" expression                { $$ = $1 == $3; }
-    | expression "<=" expression                { $$ = $1 <= $3; }
-    | expression ">=" expression                { $$ = $1 >= $3; }
+    | '-' expression %prec UMINUS { $$ = -$2; }
+    | '(' expression ')' { $$ = $2; }
+    | expression '<' expression { $$ = $1 < $3; }
+    | expression '>' expression { $$ = $1 > $3; }
+    | expression "==" expression { $$ = $1 == $3; }
+    | expression "<=" expression { $$ = $1 <= $3; }
+    | expression ">=" expression { $$ = $1 >= $3; }
     ;
 
 %%

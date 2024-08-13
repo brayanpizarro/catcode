@@ -26,8 +26,8 @@
 
 .               yyerror("el caracter ingresado no es reconido");
 
-"gatito"  {return IF; }
-"gatote"  {return ELSE; }
+"GATITO"  {return IF; }
+"GATOTE"  {return ELSE; }
 
 %%
 
